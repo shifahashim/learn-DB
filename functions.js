@@ -1,7 +1,16 @@
 const sqlite =require("sqlite3").verbose();
 const db=new sqlite.Database("./quote.db",sqlite.OPEN_READWRITE,(err)=>{
-     if(err) return console.error(err)})
+     if(err) return console.error(err);
+     db.run("PRAGMA foreign_keys = ON", (err) => {
+        if (err) {
+            console.error("Error enabling foreign keys:", err.message);
+        } else {
+            console.log("Foreign keys are enabled.");
+        }
+    });
+    })
   
+
   function create(tablename,body)
   {
     return new Promise((resolve, reject) => {
