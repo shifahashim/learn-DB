@@ -10,23 +10,47 @@ app.use(bodyParse.urlencoded({ extended: false}))
 app.use(bodyParse.json())
   
 app.post("/test/:table",async(req,res)=>{
-    const results =await db.create(req.params.table,req.body);
-    res.status(201).json({dno: results})
+    try
+    {
+        const results =await db.create(req.params.table,req.body);
+        res.status(201).json({status:201,success:true})
+    }catch(err)
+    {
+        res.status(400).json({status:300, success:false,error: err.message})
+    }
 })
 
 app.get("/test/:table",async(req,res)=>{
-    const table=await db.getAll(req.params.table);
-    res.status(200).json({table});
+    try
+    {
+        const table=await db.getAll(req.params.table);
+        res.status(200).json({status:200,sucess:true,table:table});
+    }catch(err)
+    {
+        res.status(500).json({ status: 300, success: false, error: err.message });
+    }
 })
 
 app.patch("/test/:table",async(req,res)=>{
-    const id=await db.update(req.params.table,req.body);
-    res.status(200).json({dno:id.dno});
+    try
+    {
+        const id=await db.update(req.params.table,req.body);
+        res.status(200).json({status:200,success:true,dno:id.dno});
+    }catch(err)
+    {
+        res.status(500).json({ status: 300, success: false, error: err.message });
+    }
 })
 
 app.delete("/test/:table",async(req,res)=>{
+    try
+    {
     await db.deleted(req.params.table,req.body);
-    res.status(200).json({success:true })
+    res.status(200).json({status: 200,success:true })
+    }catch(err)
+    {
+        res.status(500).json({ status: 300, success: false, error: err.message });
+    }
 })
 
 
